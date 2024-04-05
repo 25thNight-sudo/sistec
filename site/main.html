@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ambient Light and Curtains Control</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-image: url('room.png'); /* Replace 'background_image.jpg' with your image path */
+      background-image: fill;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      align-items: flex-start;
+      margin-top: 20px;
+    }
+
+    .ambient-light, .curtains {
+      width: 45%;
+      margin-bottom: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .box {
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 8px 8px 0 0;
+      position: relative;
+    }
+
+    h2 {
+      margin: 0;
+      padding: 0;
+      font-size: 24px;
+      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: inline-block;
+    }
+
+    button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .graph-container, .chart-container {
+      padding: 20px;
+    }
+
+    .reading-box, .status-box {
+      padding: 20px;
+      background-color: #f0f0f0;
+      border-radius: 0 0 8px 8px;
+    }
+
+    p {
+      margin: 0;
+      padding: 5px 0;
+    }
+
+    /* Media Query for smaller screens */
+    @media screen and (max-width: 768px) {
+      .ambient-light, .curtains {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="ambient-light">
+      <div class="box">
+        <h2>Ambient Light</h2>
+        <button id="lightSwitch">Turn On</button>
+      </div>
+      <div class="graph-container">
+        <canvas id="powerGraph" width="200" height="150"></canvas>
+      </div>
+      <div class="reading-box">
+        <p>Power Reading: <span id="powerReading">0W</span></p>
+        <p>Brightness Level: <span id="brightnessLevel">0</span></p>
+      </div>
+    </div>
+    <div class="curtains">
+      <div class="box">
+        <h2>Curtains</h2>
+        <button id="curtainSwitch">Turn On</button>
+      </div>
+      <div class="chart-container">
+        <canvas id="brightnessChart" width="200" height="150"></canvas>
+      </div>
+      <div class="status-box">
+        <p>Day/Night: <span id="dayNightStatus">Unknown</span></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('lightSwitch').addEventListener('click', function() {
+      var button = document.getElementById('lightSwitch');
+      var powerReading = document.getElementById('powerReading');
+      var brightnessLevel = document.getElementById('brightnessLevel');
+      var randomPower = Math.floor(Math.random() * 6); // Random power between 0 and 5
+      var randomBrightness = Math.floor(Math.random() * 101); // Random brightness level between 0 and 100
+
+      if (button.innerText === 'Turn On') {
+        button.innerText = 'Turn Off';
+      } else {
+        button.innerText = 'Turn On';
+      }
+
+      powerReading.innerText = randomPower + 'W';
+      brightnessLevel.innerText = randomBrightness;
+    });
+
+    document.getElementById('curtainSwitch').addEventListener('click', function() {
+      var button = document.getElementById('curtainSwitch');
+
+      if (button.innerText === 'Turn On') {
+        button.innerText = 'Turn Off';
+      } else {
+        button.innerText = 'Turn On';
+      }
+    });
+
+    // You can add more JavaScript code for handling the charts and day/night status here
+
+    // Example Chart.js configuration for power consumption graph
+    var powerGraphCtx = document.getElementById('powerGraph').getContext('2d');
+    var powerGraph = new Chart(powerGraphCtx, {
+      type: 'line',
+      data: {
+        labels: [], // Add labels here (time)
+        datasets: [{
+          label: 'Power Consumption',
+          data: [], // Add data here (power consumption)
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              max: 5 // Maximum value for y-axis
+            }
+          }]
+        }
+      }
+    });
+
+    // Example Chart.js configuration for brightness level chart
+    var brightnessChartCtx = document.getElementById('brightnessChart').getContext('2d');
+    var brightnessChart = new Chart(brightnessChartCtx, {
+      type: 'line',
+      data: {
+        labels: [], // Add labels here (time)
+        datasets: [{
+          label: 'Brightness Level',
+          data: [], // Add data here (brightness level)
+          backgroundColor: 'rgba(255, 206, 86, 0.2)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              max: 100 // Maximum value for y-axis
+            }
+          }]
+        }
+      }
+    });
+  </script>
+</body>
+</html>
